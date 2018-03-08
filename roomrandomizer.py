@@ -59,7 +59,7 @@ def top_row(top_parti, top_room):
 
 
 def find_room(parti,room, room_file_input, parti_file_input):
-	print (parti,room,room_file_input,parti_file_input)
+	
 	output_file = []
 	
 	all_rooms = list(read_file(room_file_input))
