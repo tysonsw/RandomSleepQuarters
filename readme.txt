@@ -11,7 +11,7 @@ For example:
 If the participant file has the following structure:
 Name,Address,E-mail,Need poweroutlet, has child.
 
-Then the roomoutline file must have "Need poweroutlet" and "Has child" in the same order and nothing between them.
+Then the roomoutline file must have "Need poweroutlet" and "Has child" in the same order. There can be other columns between them but the order they appear must be the same.
 
 The example files provided has for example people working with Media.
 In the participant file these have x for their Need column Media.
