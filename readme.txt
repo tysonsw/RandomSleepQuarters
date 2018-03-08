@@ -1,4 +1,5 @@
 This program was created for a larp to help decide who gets to sleep where.
+The program has been created to be run with python 3.
 
 The program takes only csv files that are seperated by ; and is in latin text.
 

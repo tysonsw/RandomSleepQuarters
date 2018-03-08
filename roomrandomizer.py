@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 This program has been created by Mattias Tauson mattias.tauson.reg(a)gmail.com.
 This program takes two input files with lists of participants and a list of rooms and decides who gets to sleep where.
