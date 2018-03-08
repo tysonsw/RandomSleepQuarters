@@ -1,0 +1,26 @@
+Room;ID;Need poweroutlet;Has child;Media
+Suite;1;;;
+Suite;2;x;;
+Suite;3;;;
+Suite;4;x;;
+Suite;5;;;
+Suite;6;;;
+Suite;7;x;;
+Suite;8;;;
+Suite;9;;;
+Barracks;1;;;x
+Barracks;2;;;x
+Barracks;3;;;x
+Barracks;4;;;x
+Barracks;5;;;x
+Barracks;6;;;x
+Barracks;7;;;x
+Barracks;8;;;x
+Barracks;9;;;x
+Barracks;10;;;x
+Barracks;11;;;x
+Cottage;1;;x;
+Cottage;2;;x;
+Cottage;3;;;
+Cottage;4;;;
+Cottage;5;;;
