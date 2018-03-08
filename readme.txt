@@ -19,4 +19,7 @@ In the roomoutline file the Barracks has been decided that there is the only pla
 So when the program checks the need of the participant and finds an x in the need for Media, 
 they will then be assigned to the Barracks since these are the only ones that meet that need.
 
+The program will input errors in the output file if it can't find rooms for either people with specific 
+needs or if there are no rooms left.
+
 The files can have any name, you tell the program what the name is of your files.
