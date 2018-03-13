@@ -54,9 +54,14 @@ def top_row(top_parti, top_room):
 	add_output(participant_row,room_row)
 
 
-def find_room(parti,room, room_file_input, parti_file_input):
+def find_room(parti,room, room_file_input, parti_file_input,group_choice=None,find_room_name=None):
 	
 	output_file = []
+	group_list = []
+	room_choice = {}
+	removed_room = []
+	same_room = []
+	room_group = []
 	
 	all_rooms = list(read_file(room_file_input))
 	all_participant = list(read_file(parti_file_input))
@@ -65,9 +70,9 @@ def find_room(parti,room, room_file_input, parti_file_input):
 
 	all_rooms.pop(0)	
 	all_participant.pop(0)
-
+	needs_participants = parti_needs_list(all_participant,parti)
 	
-	for x in parti_needs_list(all_participant,parti): #find all participants that have specific needs
+	for x in needs_participants: #find all participants that have specific needs
 		hits = []
 		for z in all_rooms:
 			for i in range(len(parti)):
@@ -94,6 +99,9 @@ def find_room(parti,room, room_file_input, parti_file_input):
 			if random_room in all_rooms:
 				add_output(output_parti=x,output_room=random_room)
 				all_rooms.remove(random_room)
+			if group_choice != None:
+				room_group.append([x[group_choice],random_room[find_room_name]])
+				
 
 		except IndexError:
 			add_output(output_parti=x,output_exception="Can't find room that meet needs")
@@ -102,27 +110,105 @@ def find_room(parti,room, room_file_input, parti_file_input):
 		if x in all_participant:
 			
 			all_participant.remove(x)
+			if group_choice == True:
+				group_list.append(x)
 
+	if group_choice != None:
 	
-	for e in all_participant:
-		
-		try: 
-			random_room = secure_random.choice(all_rooms)
-			if random_room in all_rooms:
-				add_output(output_parti=e,output_room=random_room)
-				all_rooms.remove(random_room)
-			
-		except IndexError:
-			add_output(output_parti=e,output_exception="Missing Room")
-			continue
+		for j in room_group:
+			for k in all_rooms:
+				if k[find_room_name] == j[1]:
+					same_group = []
+					for l in all_participant:
+						if l[group_choice] == j[0]:
+							same_group.append(l)
+							
 
+					random_participant = secure_random.choice(same_group)
+					
+					add_output(output_parti=random_participant,output_room=k)
+					all_rooms.remove(k)
+					removed_room.append(k)
+					all_participant.remove(random_participant)
+					continue
+
+
+
+
+
+	if group_choice != None:
+
+		for e in all_participant:
+			same_room = []
+			for m in removed_room:
+				if e[group_choice] == m[0]:
+					for n in all_rooms:
+						if n[find_room_name] == m[1]:
+							same_room.append(n)
+
+
+
+			try: 
+				random_room = secure_random.choice(same_room)
+
+				if random_room in all_rooms:
+					add_output(output_parti=e,output_room=random_room)
+					all_rooms.remove(random_room)
+					removed_room.append([e[group_choice],random_room[find_room_name]])
+
+				
+			except IndexError:
+				try: 
+					random_room = secure_random.choice(all_rooms)
+					if random_room in all_rooms:
+						add_output(output_parti=e,output_room=random_room)
+						all_rooms.remove(random_room)
+						removed_room.append([e[group_choice],random_room[find_room_name]])
+					
+				except IndexError:
+					add_output(output_parti=e,output_exception="Missing Room")
+					continue
+				
+
+	if group_choice is None:
+		for e in all_participant:
+			try: 
+				random_room = secure_random.choice(all_rooms)
+				if random_room in all_rooms:
+					add_output(output_parti=e,output_room=random_room)
+					all_rooms.remove(random_room)
+
+				
+			except IndexError:
+				add_output(output_parti=e,output_exception="Missing Room")
+				continue
 
 	#add all unused rooms to the output file
 	for i in all_rooms:
 		add_output(output_room=i)
-
+	print (room_group)
 
 	return decided_location
+
+
+
+#Cleans the input and removes "," and 
+#the extra 1 that has been added to the column number by the user. 
+def clean_input(clean):
+	clean = clean.split(',')
+
+	for f in range(len(clean)):
+		clean[f] = int(clean[f]) - 1
+	
+	return clean
+
+#Prints the headers of the csv files and add ones for simplisity for the user.
+def print_first(column_name): 
+	number = 1
+	rows = list(column_name)
+	for x in rows[0]:
+		print ("{}. {}".format(number, x))
+		number += 1
 
 #Checks with rows the user ha chosen for the output fil
 #and adds these to decided_location for later write to the output file.	
@@ -143,24 +229,6 @@ def add_output(output_parti=None,output_room=None,output_exception=None):
 			output_row.extend([output_room[x]])
 
 	decided_location.append(output_row)
-
-#Cleans the input and removes "," and 
-#the extra 1 that has been added to the column number by the user. 
-def clean_input(clean):
-	clean = clean.split(',')
-
-	for f in range(len(clean)):
-		clean[f] = int(clean[f]) - 1
-	
-	return clean
-
-#Prints the headers of the csv files and add ones for simplisity for the user.
-def print_first(column_name): 
-	number = 1
-	rows = list(column_name)
-	for x in rows[0]:
-		print ("{}. {}".format(number, x))
-		number += 1
 
 def write_output(result):
 	while True:
@@ -213,7 +281,11 @@ print("We found the following columns in this file: ")
 print_first(parti_file)
 parti_columns = clean_input(input("Which columns do you want added to the output file? \nSeperate by \",\" and no spaces: "))
 parti_needs = clean_input(input("Which numbers include specific needs? \nSeperate by \",\" and no spaces:"))
-
+group_answer = input("Do you want to keep groups together?\n This will require that you specify a room column in the roomoutline file (Y/N): ")
+if group_answer == "Y":
+	parti_group_column = int(input("Which column holds the names of the group?:")) -1
+else:
+	parti_group_column = None
 
 clear()
 print("==========================")
@@ -224,6 +296,10 @@ print("We found the following columns in this file: ")
 print_first(room_file)
 room_columns = clean_input(input("Which columns do you want added to the output file? \nSeperate by \",\" and no spaces: "))
 room_needs = clean_input(input("Which numbers include specific needs? Seperate by \",\" and no spaces:"))
+if group_answer == "Y":
+	room_name = int(input("Which column includes the name of the rooms?: ")) -1
+else: 
+	room_name = None
 
-result = find_room(parti_needs, room_needs,room_file_input, parti_file_input)
+result = find_room(parti_needs, room_needs,room_file_input, parti_file_input,group_choice=parti_group_column,find_room_name=room_name)
 write_output(result)
