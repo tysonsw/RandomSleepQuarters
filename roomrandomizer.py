@@ -73,8 +73,10 @@ def find_room(parti,room, room_file_input, parti_file_input,group_choice=None,fi
 	needs_participants = parti_needs_list(all_participant,parti)
 	
 	for x in needs_participants: #find all participants that have specific needs
+		
 		hits = []
 		for z in all_rooms:
+
 			for i in range(len(parti)):
 
 				if x[parti[i]] == z[room[i]]:
@@ -105,6 +107,7 @@ def find_room(parti,room, room_file_input, parti_file_input,group_choice=None,fi
 
 		except IndexError:
 			add_output(output_parti=x,output_exception="Can't find room that meet needs")
+			all_participant.remove(x)
 			continue
 		
 		if x in all_participant:
@@ -128,7 +131,7 @@ def find_room(parti,room, room_file_input, parti_file_input,group_choice=None,fi
 					
 					add_output(output_parti=random_participant,output_room=k)
 					all_rooms.remove(k)
-					removed_room.append(k)
+					removed_room.append([random_participant[group_choice],k[find_room_name]])
 					all_participant.remove(random_participant)
 					continue
 
@@ -184,9 +187,9 @@ def find_room(parti,room, room_file_input, parti_file_input,group_choice=None,fi
 				continue
 
 	#add all unused rooms to the output file
-	for i in all_rooms:
-		add_output(output_room=i)
-	print (room_group)
+	for o in all_rooms:
+		add_output(output_room=o)
+	
 
 	return decided_location
 
@@ -282,7 +285,7 @@ print_first(parti_file)
 parti_columns = clean_input(input("Which columns do you want added to the output file? \nSeperate by \",\" and no spaces: "))
 parti_needs = clean_input(input("Which numbers include specific needs? \nSeperate by \",\" and no spaces:"))
 group_answer = input("Do you want to keep groups together?\n This will require that you specify a room column in the roomoutline file (Y/N): ")
-if group_answer == "Y":
+if group_answer == "Y" or group_answer == "y":
 	parti_group_column = int(input("Which column holds the names of the group?:")) -1
 else:
 	parti_group_column = None
@@ -296,7 +299,7 @@ print("We found the following columns in this file: ")
 print_first(room_file)
 room_columns = clean_input(input("Which columns do you want added to the output file? \nSeperate by \",\" and no spaces: "))
 room_needs = clean_input(input("Which numbers include specific needs? Seperate by \",\" and no spaces:"))
-if group_answer == "Y":
+if group_answer == "Y" or group_answer == "y":
 	room_name = int(input("Which column includes the name of the rooms?: ")) -1
 else: 
 	room_name = None
