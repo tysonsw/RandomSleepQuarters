@@ -226,7 +226,7 @@ def print_first(column_name):
 
 def add_output(output_parti=None, output_room=None, output_exception=None):
     output_row = []
-    print(output_parti, output_room)
+    
     if output_parti:
         for x in parti_columns:
             output_row.extend([output_parti[x]])
