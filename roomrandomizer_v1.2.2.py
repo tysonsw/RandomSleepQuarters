@@ -142,6 +142,7 @@ def find_room(parti, room, room_file_input, parti_file_input, group_choice=None,
                 if random_room in all_rooms:
                     add_output(output_parti=participant, output_room=random_room)
                     all_rooms.remove(random_room)
+                    room_group.append([participant[group_choice], random_room[find_room_name]])
                     
 
 
@@ -153,6 +154,7 @@ def find_room(parti, room, room_file_input, parti_file_input, group_choice=None,
                     if random_room in all_rooms:
                         add_output(output_parti=participant, output_room=random_room)
                         all_rooms.remove(random_room)
+                        room_group.append([participant[group_choice], random_room[find_room_name]])
                         
 
                 except IndexError:
